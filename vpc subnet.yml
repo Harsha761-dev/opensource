@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion:
+'2010-09-09'
+Description: VPC with Public and Private Subnets
+
+Resources:
+
+MyVPC
+  Type:AWS::EC2::VPC
+  Properties:
+    CidrBlock: 10.0.0.0/16
+    EnableDnsSupport:true
+    EnableDnsHost:true
+    Tags:
+      Key:Name
+      Value:MyVPC
+MyInternetGateway
+  Type: AWS::EC2::InternetGateway
+  Properties:
+     Tags:
+        :Key:Name
+        :Value:MyInternetGateway
+MyVPCgatewayAttachment:
+   Type:AWS::EC2::VPCGatewayAttachment
+   Properties:
+      VpcId:!Ref MyVPC
+      InternetGatewayId:!RefMyInternetGateway
+PublicSubnet:
+   Type: AWS::EC2::Subnet
+   Properties:
+      VpcId:!Ref MyVPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone:!Select[0,!GetAZ'us-east-1']
+      MapPublicIpOnLaunch:true
+      Tags:
+         Key: Name
+         Value:PublicSubnet
+PrivateSubnet:
+   Type: AWS::EC2::Subnet
+   Properties:
+      VpcId:!Ref MyVPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone:!Select[0,!GetAZ'us-east-1']
+      MapPublicIpOnLaunch:true
+      Tags:
+         Key: Name
+         Value:PrivateSubnet
+
+Outputs:
+   VPCId:
+     Description:"VPC ID"
+     Value:!Ref MyVPC
+    PublicSubnetId:
+      Description:"Public Subnet ID"
+      Value:!Ref PublicSubnet
+    PrivateSubnetId:
+      Description:"Private Subnet ID"
+      Value:!Ref PrivateSubnet
