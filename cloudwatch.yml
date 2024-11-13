@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion:
+    '2010-09-09'
+Description:CloudWatch Monitoring and Logging Example
+
+Resources:
+  MyApplicationLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName:
+  MyApplicationLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName:
+    MyApplicationLogGroup
+      RetentionInDays:14
+      Tags:
+        Key:Name
+        Value:MyApplicationLogGroup
+
+  MyLogStream:
+    Type:AWS:logs::LogStream
+    Properties:
+      LogGroupName:!Ref
+      MyApplicationLogGroup
+      LogStreamName:MyLogStream
+
+Outputs:
+  LogGroupName:
+     Description:"CloudWatch LogGroup Name"
+     Value:!Ref MyApplicationLogGroup
+  LogStreamName:
+     Description:"CloudWatch Log Stream Name"
+     Value: !Ref MyLogStream
