@@ -1,0 +1,49 @@
+name:CI/CD Pipeline
+
+on:
+  push:
+    branches: 
+      :main
+      :staging
+      :dev
+
+jobs:
+  build:
+    runs-on:ubuntu-latest
+    steps:
+      name:Checkout code
+      uses:actions/checkout@v2
+
+      name:Set up node.js
+      uses:actions/setup-node@v2
+      with:
+        node-version:'14'
+
+      name:Install dependencies
+      run:npm install
+
+      name:Run tests
+      run:npm test
+
+  deploy:
+    runs-on:ubuntu-latest
+    needs:build
+    if:github.ref=='refs/heads/main'||github.ref=='refs/heads/main'||
+    github.ref=='refs/head/staging'||
+    github.ref=='refs/heads/dev'
+      steps:
+        name:Checkout code
+        uses:actions/checkout@v2
+
+        name:Deploy to Enviornment
+        env:
+          NODE_ENV:${{github.ref=='refs/heads/main'&&'production'||github.ref=='refs/heads/staging'&&'staging'||'development'}}
+          run:|
+            if["${{github.ref}}"=="refs/heads/main"];then
+              echo"Deploying to Production"
+          elif["${{github.ref}}"=="refs/heads/staging"];then
+             echo"Deploying to Staging"
+
+          else
+            echo "Deploying to Development"
+            
